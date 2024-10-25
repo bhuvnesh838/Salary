@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        label, input, button {
+            display: block;
+            margin: 10px 0;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Salary Prediction Based on Experience</h1>
+    <form id="salaryForm">
+        <label for="yearsExperience">Enter Years of Experience:</label>
+        <input type="number" id="yearsExperience" name="yearsExperience" step="0.1" min="0" required>
+        <button type="submit">Predict Salary</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        const form = document.getElementById('salaryForm');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // Get the input value
+            const yearsExperience = document.getElementById('yearsExperience').value;
+
+            // Send POST request to the API
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ years_experience: yearsExperience })
+            });
+
+            // Parse and display the result
+            const data = await response.json();
+            document.getElementById('result').textContent = `Predicted Salary: ${data.predicted_salary}`;
+        });
+    </script>
+</body>
+</html>
